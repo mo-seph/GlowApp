@@ -2,14 +2,18 @@ import React from "react";
 import Fill from "./behaviours/Fill";
 import Watchdog from "./behaviours/Watchdog";
 import NotFound from "./behaviours/NotFound";
+import GlowBall from "./behaviours/GlowBall";
 
 const Behaviours = {
   Fill: Fill,
+  Glow: GlowBall,
   Watchdog: Watchdog
 };
 
 export default (block,callbacks) => {
-  const name = block.behaviour;
+  if( ! block ) return <></>;
+  console.log("Got block: "+JSON.stringify(block))
+  const name = block.type;
   var cls = Behaviours[name] || NotFound
   // component does exist
     const elem = React.createElement(cls, {

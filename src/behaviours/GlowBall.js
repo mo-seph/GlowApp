@@ -11,7 +11,8 @@ export default (props) => {
   const [green, setGreen] = useState(data['g'] || 0.0)
   const [blue, setBlue] = useState(data['b'] || 0.0)
   const [white, setWhite] = useState(data['w'] || 0.0)
-  const [time, setTime] = useState(data['time'] || 0.0)
+  const [rate, setRate] = useState(data['rate'] || 0.0)
+  const [width, setWidth] = useState(data['rate'] || 0.0)
 
   useEffect(() => {
     console.log("Updating Fill block with: " + JSON.stringify(props))
@@ -19,11 +20,12 @@ export default (props) => {
     setGreen(data['g'])
     setBlue(data['b'])
     setWhite(data['w'])
-    setTime(data['time'])
-  },[data['r'],data['g'],data['b'],data['w'],data['time']])
+    setRate(data['rate'])
+    setWidth(data['width'])
+  },[data['r'],data['g'],data['b'],data['w'],data['width'],data['rate']])
 
   const send = () => {
-    props.callbacks.sendData(props,{ r: red, g: green, b: blue, w: white, time:time });
+    props.callbacks.sendData(props,{ r: red, g: green, b: blue, w: white, rate:rate, width:width });
   }
 
   var ui =
@@ -57,11 +59,18 @@ export default (props) => {
       onChange={(e, val) => setWhite(val)} onChangeCommitted={send}/>
     </Box>
     <Box component="span" >
-      <Typography id="t-slider" gutterBottom>Interp</Typography>
+      <Typography id="r-slider" gutterBottom>Rate</Typography>
       <Slider
-      aria-labelledby="t-slider"
-      value={time} step={0.001} min={0.0} max={20.0}
-      onChange={(e, val) => setTime(val)} onChangeCommitted={send}/>
+      aria-labelledby="r-slider"
+      value={rate} step={0.001} min={0.0} max={1.0}
+      onChange={(e, val) => setRate(val)} onChangeCommitted={send}/>
+    </Box>
+    <Box component="span" >
+      <Typography id="width-slider" gutterBottom>Width</Typography>
+      <Slider
+      aria-labelledby="width-slider"
+      value={width} step={0.001} min={0.0} max={0.3}
+      onChange={(e, val) => setWidth(val)} onChangeCommitted={send}/>
     </Box>
   </React.Fragment>
   return ( WrapUI(ui,props) );

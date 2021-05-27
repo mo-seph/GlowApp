@@ -1,26 +1,52 @@
 import '../App.css';
 import { Box, Slider, Typography} from '@material-ui/core';
-import {WrapUI} from '../MyStyles'
+import MyStyles,{WrapUI} from '../MyStyles'
+import { makeStyles,withStyles } from '@material-ui/core/styles';
 
-import React, {useState} from "react"
+import React, {useState,useEffect} from "react"
 
 
 export default (props) => {
-  const [length, setLength] = useState(0)
+  const data = props['block']['data']
+  const [length, setLength] = useState(data['length'] || 10)
+  const [factor, setFactor] = useState(data['factor'] || 10)
+
+  const useStyles = makeStyles(MyStyles);
+  const classes = useStyles();
+
+  useEffect(() => {
+    console.log("Updating Watchdog block with: " + JSON.stringify(props))
+    setLength(data['length'])
+    setFactor(data['factor'])
+  },[data['length'],data['factor']])
+
   const send = () => {
-    props.callbacks.send(props,{ length: length });
+    console.log(JSON.stringify(props.callbacks))
+    props.callbacks.sendData(props,{ length: length,factor:factor });
   }
   const ui =
  <React.Fragment>
-      <Box component="span" >
+      <Box component="span">
+
         <Typography id="len-slider" gutterBottom>Length</Typography>
         <Slider
-          aria-labelledby="len-slider"
-          defaultValue={10} step={1} min={1} max={30}
+          aria-labelledby="discrete-slider-small-steps"
+          valueLabelDisplay="on"
+          marks
+          value={length} step={1} min={2} max={30}
           onChange={(e, val) => setLength(val)} onChangeCommitted={send}/>
+
+          <Typography id="factor-slider" gutterBottom>Factor</Typography>
+          <Slider
+            aria-labelledby="discrete-slider-small-steps"
+            valueLabelDisplay="on"
+            marks
+            value={factor} step={1} min={1} max={30}
+            onChange={(e, val) => setFactor(val)} onChangeCommitted={send}/>
+
       </Box>
     </React.Fragment>
-  return ( WrapUI(ui,props.block.behaviour,props.block.id) );
+  return ( WrapUI(ui,props) );
 }
 
 //export default Fill;

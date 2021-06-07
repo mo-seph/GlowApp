@@ -6,7 +6,7 @@ import React, {useState, useEffect } from "react"
 
 
 export default (props) => {
-  const data = props['block']['data']
+  const data = props['block']['data'] || {}
   const [red, setRed] = useState(data['r'] || 0.0)
   const [green, setGreen] = useState(data['g'] || 0.0)
   const [blue, setBlue] = useState(data['b'] || 0.0)

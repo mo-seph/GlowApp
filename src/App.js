@@ -10,6 +10,7 @@ import Behaviours from "./Behaviours";
 
 import mqtt from 'mqtt'
 
+
 const default_data = {
   behaviours:[
     {
@@ -33,6 +34,12 @@ const default_data = {
       }
     },
     {
+      id:2,
+      type:"PixelClock",
+      active:true,
+      name:"Time"
+    },
+    {
       id: 16,
       type:"Watchdog",
       active:true,
@@ -47,8 +54,8 @@ const App = () => {
 
   const [connectionStatus, setConnectionStatus] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [behaviours, setBehaviours] = useState([]);
-  //const [behaviours, setBehaviours] = useState(default_data.behaviours);
+  //const [behaviours, setBehaviours] = useState([]);
+  const [behaviours, setBehaviours] = useState(default_data.behaviours);
   const [client, setClient] = useState();
   const [functions, setFunctions] = useState({});
 

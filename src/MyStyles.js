@@ -60,8 +60,8 @@ export const WrapUI = (input,props) => {
               />
           } />
         }
-        title={props.block.type}
-        subheader={"ID: " + props.block.id}
+        title={props.block.name}
+        subheader={"ID: " + props.block.id + ", Type: " + props.block.type}
         style={MyStyles.cardHeader}
       />
       <CardContent className={classes.cardContent}>

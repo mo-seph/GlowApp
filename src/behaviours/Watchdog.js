@@ -7,7 +7,7 @@ import React, {useState,useEffect} from "react"
 
 
 export default (props) => {
-  const data = props['block']['data']
+  const data = props['block']['data'] || {}
   const [length, setLength] = useState(data['length'] || 10)
   const [factor, setFactor] = useState(data['factor'] || 10)
 

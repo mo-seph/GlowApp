@@ -3,11 +3,13 @@ import Fill from "./behaviours/Fill";
 import Watchdog from "./behaviours/Watchdog";
 import NotFound from "./behaviours/NotFound";
 import GlowBall from "./behaviours/GlowBall";
+import PixelClock from "./behaviours/PixelClock";
 
 const Behaviours = {
   Fill: Fill,
   Glow: GlowBall,
-  Watchdog: Watchdog
+  Watchdog: Watchdog,
+  PixelClock: PixelClock
 };
 
 export default (block,callbacks) => {

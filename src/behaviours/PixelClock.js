@@ -8,6 +8,7 @@ import React, {useState,useEffect} from "react"
 
 export default (props) => {
   const data = props['block']['data'] || {}
+  console.log("Got PixelData: " + JSON.stringify(data));
   const [start, setStart] = useState(data['start'] || 10)
   const [scale, setScale] = useState(data['scale'] || 1)
 
@@ -16,8 +17,8 @@ export default (props) => {
 
   useEffect(() => {
     console.log("Updating PixelClock block with: " + JSON.stringify(props))
-    setStart(data['start'])
-    setScale(data['scale'])
+    setStart(data['start'] || 10)
+    setScale(data['scale'] || 1)
   },[data['start'],data['scale']])
 
   const send = () => {

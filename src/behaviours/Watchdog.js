@@ -16,8 +16,8 @@ export default (props) => {
 
   useEffect(() => {
     console.log("Updating Watchdog block with: " + JSON.stringify(props))
-    setLength(data['length'])
-    setFactor(data['factor'])
+    setLength(data['length'] || 10 )
+    setFactor(data['factor'] || 10)
   },[data['length'],data['factor']])
 
   const send = () => {

@@ -28,28 +28,28 @@ export default (props) => {
 
   var ui =
   <React.Fragment>
-    <Box component="span" >
+    <Box component="span" key="red">
       <Typography id="r-slider" gutterBottom>R</Typography>
       <Slider
       aria-labelledby="r-slider"
       value={red} step={0.001} min={0.0} max={1.0}
       onChange={(e, val) => setRed(val)} onChangeCommitted={send}/>
     </Box>
-    <Box component="span" >
+    <Box component="span" key="green">
       <Typography id="g-slider" gutterBottom>G</Typography>
       <Slider
       aria-labelledby="g-slider"
       value={green} step={0.001} min={0.0} max={1.0}
       onChange={(e, val) => setGreen(val)} onChangeCommitted={send}/>
     </Box>
-    <Box component="span" >
+    <Box component="span" key="blue">
       <Typography id="b-slider" gutterBottom>B</Typography>
       <Slider
       aria-labelledby="b-slider"
       value={blue} step={0.001} min={0.0} max={1.0}
       onChange={(e, val) => setBlue(val)} onChangeCommitted={send}/>
     </Box>
-    <Box component="span" >
+    <Box component="span" key="white">
       <Typography id="w-slider" gutterBottom>W</Typography>
       <Slider
       aria-labelledby="w-slider"

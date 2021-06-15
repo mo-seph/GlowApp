@@ -4,12 +4,14 @@ import Watchdog from "./behaviours/Watchdog";
 import NotFound from "./behaviours/NotFound";
 import GlowBall from "./behaviours/GlowBall";
 import PixelClock from "./behaviours/PixelClock";
+import Alarm from "./behaviours/Alarm";
 
 const Behaviours = {
   Fill: Fill,
   Glow: GlowBall,
   Watchdog: Watchdog,
-  PixelClock: PixelClock
+  PixelClock: PixelClock,
+  Alarms: Alarm
 };
 
 export default (block,callbacks) => {
@@ -19,11 +21,9 @@ export default (block,callbacks) => {
   var cls = Behaviours[name] || NotFound
   // component does exist
     const elem = React.createElement(cls, {
-      key: block._uid,
+      key: block.id,
       block: block,
       callbacks:callbacks
     });
-    return <div>
-    {elem}
-    </div>
+    return elem
 }

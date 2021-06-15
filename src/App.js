@@ -1,15 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
-import { Button, Box, Slider, Typography,
-    Card, CardHeader, FormControlLabel, Switch,InputLabel, Select,
-    MenuItem, NativeSelect, Tab, Tabs, AppBar} from '@material-ui/core';
-import SwipeableViews from 'react-swipeable-views';
+import { Button, Card, CardHeader, FormControlLabel, Switch } from '@material-ui/core';
 import React, {useState, useEffect, useCallback } from "react"
-import { makeStyles,withStyles } from '@material-ui/core/styles';
-import MyStyles,{WrapUI} from './MyStyles'
-import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import MyStyles from './MyStyles'
 
-import Behaviours from "./Behaviours";
 import Device from "./Device";
 import MyTabs from "./MyTabs";
 
@@ -102,31 +96,31 @@ const App = () => {
         client.publish('leds/ping_request', JSON.stringify({"ping":1}))
       });
       client.on('message', (topic, payload, packet) => {
-        console.log("Message! "+payload + "  on " + topic)
+        //console.log("Message! "+payload + "  on " + topic)
         const id_match = topic.match(/leds\/(.*)\/state/);
         if( id_match ) {
-          console.log("Incoming device state")
-          console.log(deviceState)
           const device_id = id_match[1];
-          console.log("Got message from: " + device_id)
-          var data = JSON.parse(payload.toString())
-          console.log(data)
-          deviceState[device_id] = data['state'];
-          console.log("Updated device state")
-          console.log(deviceState)
-          setDeviceState(deviceState);
-          forceUpdate();
+          //console.log("Got message from: " + device_id)
+          try {
+            var data = JSON.parse(payload.toString())
+            deviceState[device_id] = data['state'];
+            setDeviceState(deviceState);
+          }
+          catch( err ) {
+            console.log("Couldn't set data from document")
+            console.log(payload.toString())
+          }
         }
         else if( topic == "leds/ping_response") {
           var data = JSON.parse(payload.toString())
           devices[data["id"]] = data;
           setDevices(devices);
-          console.log("Setting devices: " + JSON.stringify(devices))
-          forceUpdate();
+          //console.log("Setting devices: " + JSON.stringify(devices))
         }
         else {
           console.log("Unknown message: " + payload.toString())
         }
+        forceUpdate();
       });
       setClient(client);
 
@@ -147,13 +141,13 @@ const App = () => {
   }
 
   const sendData = (device)=>(props,data) => {
-    console.log("Printing data from [" + props.block.id + "] " + JSON.stringify(data));
+    //console.log("Printing data from [" + props.block.id + "] " + JSON.stringify(data));
     const packet = {
       update:props.block.id,
       data:data
     };
     const packet_s =JSON.stringify(packet)
-    console.log("Became: " + packet_s );
+    //console.log("Became: " + packet_s );
     client.publish(device.mqtt_commands, packet_s)
   }
   const funcs =  {
@@ -165,6 +159,15 @@ const App = () => {
   const useStyles = makeStyles(MyStyles);
   const classes = useStyles();
 
+  const device_data = Object.keys(devices).map(
+    (k) => {return({device: devices[k], state: deviceState[k] })}
+  )
+  const device_to_name = (v)=>v.device.name
+  const device_to_content = (v)=>Device({"device":v.device,"state":v.state},funcs)
+  const on_select = (v) => {
+    sendCommand(v.device)({state:1})
+    console.log("On Change: " + JSON.stringify(v))
+  }
 
   console.log("Redrawing!")
   return (
@@ -194,18 +197,31 @@ const App = () => {
       title="Glow App"
       style={MyStyles.cardHeader}
     />
-
-
     </Card>
-  {MyTabs(
-    Object.keys(devices).map(
-      (k) => {return({device: devices[k], state: deviceState[k] })}
-    ),
-    (v)=>v.device.name,
-    (v)=>Device({"device":v.device,"state":v.state},funcs) )}
-
+    {MyTabs(device_data, device_to_name,device_to_content,on_select)}
     </div>
   );
 }
+/*
+
+  */
+
+/*
+{Object.keys(devices).map( (v)=>JSON.stringify(devices[v]) )}
+*/
+
+/*
+{Object.keys(devices).map(
+  (v)=>Device({device:devices[v],state:deviceState[v]},funcs) )}
+  */
+
+/*
+{MyTabs(
+  Object.keys(devices).map(
+    (k) => {return({device: devices[k], state: deviceState[k] })}
+  ),
+  (v)=>v.device.name,
+  (v)=>Device({"device":v.device,"state":v.state},funcs) )}
+*/
 
 export default App;

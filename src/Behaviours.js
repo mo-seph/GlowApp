@@ -16,7 +16,6 @@ const Behaviours = {
 
 export default (block,callbacks) => {
   if( ! block ) return <></>;
-  console.log("Got block: "+JSON.stringify(block))
   const name = block.type;
   var cls = Behaviours[name] || NotFound
   // component does exist

@@ -12,49 +12,34 @@ import React, {useState,useEffect} from "react"
 export default (props,functionsIn) => {
   const behaviours = props['state'] || []
   const device = props['device'] || {}
-  console.log("Got props for Device: ",props)
-  console.log("Got functions for Device: ",functionsIn)
 
   const useStyles = makeStyles(MyStyles);
-  const classes = useStyles();
-
-  useEffect(() => {
-  },[])
+  //const classes = useStyles();
 
   const functions = {
     sendData : functionsIn.sendData(device),
     sendCommand : functionsIn.sendCommand(device),
   }
 
+  const getState = () => { functions.sendCommand({state:1}) }
+
   return(
     <>
-  <Card className={classes.device_card} key={device.id}>
+  <Card  key={device.id} style={MyStyles.card}>
     <CardHeader
-      avatar={
-        <BrushIcon/>
+      avatar={ <BrushIcon/> }
+      title={ props.device.name }
+      action={
+        <Button color="primary" onClick={getState}> Update</Button>
       }
-      title={
-        <>
-        {props.device.name}
-        </>
-      }
-      subheader={
-        <>
-        {"ID: " + props.device.id + ", Type: " + props.device.name}<br/>
-        <Button color="primary"
-          onClick={() => { functions.sendCommand({state:1}) }} >
-          Update</Button>
-        </>
-      }
+      subheader={ "ID: " + props.device.id + ", Type: " + props.device.name }
       style={MyStyles.cardHeader}
     />
-    <CardContent className={classes.cardContent}>
-      {JSON.stringify(device)}
-    </CardContent>
-    {behaviours.map(behaviour => Behaviours(behaviour,functions))}
   </Card>
+    {behaviours.map(behaviour => Behaviours(behaviour,functions))}
   </>
 )
 }
+
 
 //export default Fill;

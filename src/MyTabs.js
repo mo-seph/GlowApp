@@ -47,19 +47,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default (items,toLabel,toContent,defaultTab=0) => {
+export default (items,toLabel,toContent,onSelect,defaultTab=0) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(defaultTab);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    onSelect(items[newValue])
   };
 
   return (
-    <div className={classes.root}>
+    <>
+    <div className={classes.root} key="tabs">
     <AppBar position="static">
       <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-    {items.map((v,i)=> <Tab label={toLabel(v)} {...a11yProps(i)} /> )}
+    {items.map((v,i)=> <Tab label={toLabel(v)} key={i} {...a11yProps(i)} /> )}
       </Tabs>
     </AppBar>
     {items.map((v,i)=>
@@ -67,7 +69,8 @@ export default (items,toLabel,toContent,defaultTab=0) => {
         { toContent(v) }
       </TabPanel>
     )}
-
     </div>
+    </>
+
   );
 }

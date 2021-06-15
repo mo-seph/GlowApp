@@ -24,7 +24,7 @@ const MyStyles = {
     margin: "20px"
   },
   device_card: {
-    width:420,
+    width:440,
     //background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     transition: "0.3s",
     boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
@@ -45,9 +45,8 @@ const MyStyles = {
 export const WrapUI = (input,props) => {
   const useStyles = makeStyles(MyStyles);
   const classes = useStyles();
-  console.log(JSON.stringify(props))
   const handleChange = (e,v) => {
-    console.log("Event: "+e+" val: " + v)
+    //console.log("Event: "+e+" val: " + v)
     if( v ) props.callbacks.sendCommand({activate:props.block.id})
     else props.callbacks.sendCommand({deactivate:props.block.id})
   }

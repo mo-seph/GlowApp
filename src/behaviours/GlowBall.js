@@ -28,8 +28,7 @@ export default (props) => {
     props.callbacks.sendData(props,{ r: red, g: green, b: blue, w: white, rate:rate, width:width });
   }
 
-  var ui =
-  <React.Fragment>
+  return <React.Fragment>
     <Box component="span" >
       <Typography id="r-slider" gutterBottom>R</Typography>
       <Slider
@@ -73,7 +72,6 @@ export default (props) => {
       onChange={(e, val) => setWidth(val)} onChangeCommitted={send}/>
     </Box>
   </React.Fragment>
-  return ( WrapUI(ui,props) );
 }
 
 //export default Fill;

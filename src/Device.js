@@ -2,7 +2,7 @@ import './App.css';
 import { Box, Slider, Typography, Button, Switch, Card, CardHeader, CardContent} from '@material-ui/core';
 import MyStyles,{WrapUI} from './MyStyles'
 import { makeStyles,withStyles } from '@material-ui/core/styles';
-import Behaviours from "./Behaviours";
+import Behaviour from "./Behaviour";
 import BrushIcon from '@material-ui/icons/Brush';
 
 
@@ -14,11 +14,11 @@ export default (props,functionsIn) => {
   const device = props['device'] || {}
 
   const useStyles = makeStyles(MyStyles);
-  //const classes = useStyles();
+  const classes = useStyles();
 
   const functions = {
-    sendData : functionsIn.sendData(device),
-    sendCommand : functionsIn.sendCommand(device),
+    sendData : props.functions.sendData(device),
+    sendCommand : props.functions.sendCommand(device),
   }
 
   const getState = () => { functions.sendCommand({state:1}) }
@@ -36,7 +36,7 @@ export default (props,functionsIn) => {
       style={MyStyles.cardHeader}
     />
   </Card>
-    {behaviours.map(behaviour => Behaviours(behaviour,functions))}
+  {behaviours.map((behaviour,i) => <Behaviour block={behaviour} functions={functions} key={i}/>)}
   </>
 )
 }

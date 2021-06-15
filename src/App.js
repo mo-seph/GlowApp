@@ -163,7 +163,7 @@ const App = () => {
     (k) => {return({device: devices[k], state: deviceState[k] })}
   )
   const device_to_name = (v)=>v.device.name
-  const device_to_content = (v)=>Device({"device":v.device,"state":v.state},funcs)
+  const device_to_content = (v)=><Device device={v.device} state={v.state} functions={funcs} />
   const on_select = (v) => {
     sendCommand(v.device)({state:1})
     console.log("On Change: " + JSON.stringify(v))
@@ -198,7 +198,11 @@ const App = () => {
       style={MyStyles.cardHeader}
     />
     </Card>
-    {MyTabs(device_data, device_to_name,device_to_content,on_select)}
+    <MyTabs
+      items={device_data}
+      toLabel={device_to_name}
+      toContent={device_to_content}
+      onSelect={on_select} />
     </div>
   );
 }

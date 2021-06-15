@@ -26,8 +26,7 @@ export default (props) => {
     props.callbacks.sendData(props,{ r: red, g: green, b: blue, w: white, time:time });
   }
 
-  var ui =
-  <React.Fragment>
+  return <React.Fragment>
     <Box component="span" key="red">
       <Typography id="r-slider" gutterBottom>R</Typography>
       <Slider
@@ -64,7 +63,6 @@ export default (props) => {
       onChange={(e, val) => setTime(val)} onChangeCommitted={send}/>
     </Box>
   </React.Fragment>
-  return ( WrapUI(ui,props) );
 }
 
 //export default Fill;

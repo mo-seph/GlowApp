@@ -26,8 +26,7 @@ export default (props) => {
     props.callbacks.sendData(props,{ start: start,scale:scale });
   }
 
-  const ui =
- <React.Fragment>
+  return <React.Fragment>
       <Box component="span">
 
         <Typography id="start-slider" gutterBottom>Start</Typography>
@@ -46,7 +45,6 @@ export default (props) => {
 
       </Box>
     </React.Fragment>
-  return ( WrapUI(ui,props) );
 }
 
 //export default Fill;

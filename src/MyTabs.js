@@ -47,9 +47,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default (items,toLabel,toContent,onSelect,defaultTab=0) => {
+export default (props) => {
+  const items = props.items;
+  const toLabel = props.toLabel;
+  const toContent = props.toContent;
+  const onSelect = props.onSelect;
   const classes = useStyles();
-  const [value, setValue] = React.useState(defaultTab);
+  const [value, setValue] = React.useState(props.defaultTab || 0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

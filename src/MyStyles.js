@@ -42,42 +42,4 @@ const MyStyles = {
   }
 };
 
-export const WrapUI = (input,props) => {
-  const useStyles = makeStyles(MyStyles);
-  const classes = useStyles();
-  const handleChange = (e,v) => {
-    //console.log("Event: "+e+" val: " + v)
-    if( v ) props.callbacks.sendCommand({activate:props.block.id})
-    else props.callbacks.sendCommand({deactivate:props.block.id})
-  }
-  const content = props.block.active ? input : <></>
-  return (
-    <Card className={classes.card} key={props.block.id}>
-      <CardHeader
-        avatar={
-          <BrushIcon/>
-        }
-        action={
-          <FormControlLabel
-            label="Active"
-            control={
-              <Switch
-                checked={props.block.active || false}
-                onChange={handleChange}
-                size="small"
-                name="active" color="primary"
-              />
-          } />
-        }
-        title={props.block.name}
-        subheader={"ID: " + props.block.id + ", Type: " + props.block.type}
-        style={MyStyles.cardHeader}
-      />
-      <CardContent className={classes.cardContent}>
-        {content}
-      </CardContent>
-    </Card>
- );
-}
-
 export default MyStyles

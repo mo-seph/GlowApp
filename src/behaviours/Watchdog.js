@@ -24,8 +24,7 @@ export default (props) => {
     console.log(JSON.stringify(props.callbacks))
     props.callbacks.sendData(props,{ length: length,factor:factor });
   }
-  const ui =
- <React.Fragment>
+  return <React.Fragment>
       <Box component="span">
 
         <Typography id="len-slider" gutterBottom>Length</Typography>
@@ -46,7 +45,6 @@ export default (props) => {
 
       </Box>
     </React.Fragment>
-  return ( WrapUI(ui,props) );
 }
 
 //export default Fill;

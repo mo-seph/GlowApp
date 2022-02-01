@@ -47,8 +47,9 @@ export default (props) => {
         <Typography id="length-slider" gutterBottom>Length</Typography>
         <Slider
           aria-labelledby="discrete-slider-small-steps"
+          valueLabelDisplay="on"
           marks
-          value={length} step={1} min={1} max={50}
+          value={length} step={1} min={10} max={200}
           onChange={(e, val) => setLength(val)} onChangeCommitted={send}/>
 
         <Box>

@@ -10,7 +10,8 @@ import Watchdog from "./behaviours/Watchdog";
 import NotFound from "./behaviours/NotFound";
 import GlowBall from "./behaviours/GlowBall";
 import PixelClock from "./behaviours/PixelClock";
-import Alarm from "./behaviours/Alarm";
+import PixelCountdown from "./behaviours/PixelCountdown";
+import ColorAlarm from "./behaviours/ColorAlarm";
 
 
 
@@ -20,7 +21,8 @@ const Behaviours = {
   Glow: GlowBall,
   Watchdog: Watchdog,
   PixelClock: PixelClock,
-  Alarms: Alarm
+  ColorAlarm: ColorAlarm,
+  PixelCountdown: PixelCountdown
 };
 
 /*

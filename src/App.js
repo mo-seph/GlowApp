@@ -67,8 +67,8 @@ const default_state = {
 }
 
 const default_devices = {
-  living_d:{id:"living_d",name:"Living Room Default","ip":"192.168.0.0","mqtt_commands":"leds/default/commands","mqtt_state":"leds/default/state"},
-  living:{"id":"living","name":"Living Room Initial","ip":"192.168.178.229","mqtt_commands":"leds/living/commands","mqtt_state":"leds/living/state"},
+  //living_d:{id:"living_d",name:"Living Room Default","ip":"192.168.0.0","mqtt_commands":"leds/default/commands","mqtt_state":"leds/default/state"},
+  //living:{"id":"living","name":"Living Room Initial","ip":"192.168.178.229","mqtt_commands":"leds/living/commands","mqtt_state":"leds/living/state"},
 }
 
 const App = () => {

@@ -12,6 +12,9 @@ export default (props) => {
   const [blue, setBlue] = useState(data['b'] || 0.0)
   const [white, setWhite] = useState(data['w'] || 0.0)
   const [time, setTime] = useState(data['time'] || 0.0)
+  const [hue, setHue] = useState(data['h'] || 0.0)
+  const [saturation, setSaturation] = useState(data['s'] || 0.0)
+  const [intensity, setIntensity] = useState(data['v'] || 0.0)
 
   useEffect(() => {
     console.log("Updating Fill block with: " + JSON.stringify(props))
@@ -22,8 +25,14 @@ export default (props) => {
     setTime(data['time'])
   },[data['r'],data['g'],data['b'],data['w'],data['time']])
 
-  const send = () => {
-    props.callbacks.sendData(props,{ r: red, g: green, b: blue, w: white, time:time });
+  const sendRGBW = () => {
+    props.callbacks.sendData(props,{ r: red, g: green, b: blue, w: white});
+  }
+  const sendTime = () => {
+    props.callbacks.sendData(props,{ time:time });
+  }
+  const sendHSV = () => {
+    props.callbacks.sendData(props,{ h: hue, s: saturation, v: intensity});
   }
 
   return <React.Fragment>
@@ -32,35 +41,56 @@ export default (props) => {
       <Slider
       aria-labelledby="r-slider"
       value={red} step={0.001} min={0.0} max={1.0}
-      onChange={(e, val) => setRed(val)} onChangeCommitted={send}/>
+      onChange={(e, val) => setRed(val)} onChangeCommitted={sendRGBW}/>
     </Box>
     <Box component="span" key="green">
       <Typography id="g-slider" gutterBottom>G</Typography>
       <Slider
       aria-labelledby="g-slider"
       value={green} step={0.001} min={0.0} max={1.0}
-      onChange={(e, val) => setGreen(val)} onChangeCommitted={send}/>
+      onChange={(e, val) => setGreen(val)} onChangeCommitted={sendRGBW}/>
     </Box>
     <Box component="span" key="blue">
       <Typography id="b-slider" gutterBottom>B</Typography>
       <Slider
       aria-labelledby="b-slider"
       value={blue} step={0.001} min={0.0} max={1.0}
-      onChange={(e, val) => setBlue(val)} onChangeCommitted={send}/>
+      onChange={(e, val) => setBlue(val)} onChangeCommitted={sendRGBW}/>
     </Box>
     <Box component="span" key="white">
       <Typography id="w-slider" gutterBottom>W</Typography>
       <Slider
       aria-labelledby="w-slider"
       value={white} step={0.001} min={0.0} max={1.0}
-      onChange={(e, val) => setWhite(val)} onChangeCommitted={send}/>
+      onChange={(e, val) => setWhite(val)} onChangeCommitted={sendRGBW}/>
     </Box>
     <Box component="span" >
       <Typography id="t-slider" gutterBottom>Interp</Typography>
       <Slider
       aria-labelledby="t-slider"
       value={time} step={0.001} min={0.0} max={20.0}
-      onChange={(e, val) => setTime(val)} onChangeCommitted={send}/>
+      onChange={(e, val) => setTime(val)} onChangeCommitted={sendTime}/>
+    </Box>
+    <Box component="span" >
+      <Typography id="h-slider" gutterBottom>Hue</Typography>
+      <Slider
+      aria-labelledby="h-slider"
+      value={hue} step={0.5} min={0.0} max={360.0}
+      onChange={(e, val) => setHue(val)} onChangeCommitted={sendHSV}/>
+    </Box>
+    <Box component="span" >
+      <Typography id="s-slider" gutterBottom>Saturation</Typography>
+      <Slider
+      aria-labelledby="s-slider"
+      value={saturation} step={0.01} min={0.0} max={1.0}
+      onChange={(e, val) => setSaturation(val)} onChangeCommitted={sendHSV}/>
+    </Box>
+    <Box component="span" >
+      <Typography id="v-slider" gutterBottom>Intensity</Typography>
+      <Slider
+      aria-labelledby="v-slider"
+      value={intensity} step={0.01} min={0.0} max={1.0}
+      onChange={(e, val) => setIntensity(val)} onChangeCommitted={sendHSV}/>
     </Box>
   </React.Fragment>
 }

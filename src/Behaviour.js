@@ -19,6 +19,7 @@ import ColorAlarm from "./behaviours/ColorAlarm";
 const Behaviours = {
   Fill: Fill,
   Glow: GlowBall,
+  Fire: Fire,
   Watchdog: Watchdog,
   PixelClock: PixelClock,
   ColorAlarm: ColorAlarm,

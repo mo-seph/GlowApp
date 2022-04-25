@@ -2,6 +2,7 @@ import '../App.css';
 import { Box, Slider, Typography, Button, Switch} from '@mui/material';
 
 import React, {useState,useEffect} from "react"
+import { LabelHSlider } from '../UIElements';
 
 
 export default (props) => {
@@ -33,28 +34,28 @@ export default (props) => {
  return <React.Fragment>
       <Box component="span">
 
-        <Typography id="start-slider" gutterBottom>Position</Typography>
+        {LabelHSlider("start-slider","Position",
         <Slider
           marks
           value={start} step={0.001} min={0.0} max={1.0}
           onChange={(e, val) => setStart(val)} onChangeCommitted={send}/>
-
-        <Typography id="length-slider" gutterBottom>Length</Typography>
+        )}
+        {LabelHSlider("length-slider","Length",
         <Slider
-          aria-labelledby="discrete-slider-small-steps"
-          valueLabelDisplay="on"
-          marks
+          aria-labelledby="length-slider"
           value={length} step={1} min={10} max={200}
           onChange={(e, val) => setLength(val)} onChangeCommitted={send}/>
+        )}
 
+        {LabelHSlider("scale-slider","Time",
+          <Slider
+            aria-labelledby="scale-slider"
+            valueLabelDisplay="on"
+            marks
+            value={time} step={0.5} min={0.5} max={60}
+            onChange={(e, val) => setTime(val)} />
+        )}
         <Box>
-        <Typography id="scale-slider" gutterBottom>Time</Typography>
-        <Slider
-          aria-labelledby="discrete-slider-small-steps"
-          valueLabelDisplay="on"
-          marks
-          value={time} step={0.5} min={0.5} max={60}
-          onChange={(e, val) => setTime(val)} />
         <Button variant="contained" color="primary" disabled={running ? true : false}
           onClick={() => { activate() }} >
           Start

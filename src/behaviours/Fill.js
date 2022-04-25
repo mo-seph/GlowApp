@@ -3,7 +3,7 @@ import {  Box, Slider, Typography, Stack, Tab} from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 
 import React, {useState, useEffect } from "react"
-import { RGBWInterface, HSVInterface } from '../UIElements';
+import { RGBWInterface, HSVInterface,HSlider } from '../UIElements';
 import { propsToClassKey } from '@mui/styles';
 
 
@@ -42,14 +42,7 @@ export default (props) => {
           </TabPanel>
         </TabContext>
     </Box>
-    <Box component="span" >
-      <Typography id="t-slider" gutterBottom>Interp</Typography>
-      <Slider
-      aria-labelledby="t-slider"
-      value={time} step={0.001} min={0.0} max={20.0}
-      onChange={(e, val) => setTime(val)} onChangeCommitted={sendTime}/>
-    </Box>
-  
+    {HSlider("interp-slider","Fade",time,setTime,sendTime,0.0,20.0)}
   </React.Fragment>
 }
 

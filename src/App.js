@@ -96,7 +96,7 @@ const App = () => {
         client.publish('leds/ping_request', JSON.stringify({"ping":1}))
       });
       client.on('message', (topic, payload, packet) => {
-        //console.log("Message! "+payload + "  on " + topic)
+        console.log("Message! "+payload + "  on " + topic)
         const id_match = topic.match(/leds\/(.*)\/state/);
         if( id_match ) {
           const device_id = id_match[1];

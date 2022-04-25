@@ -12,6 +12,7 @@ import GlowBall from "./behaviours/GlowBall";
 import PixelClock from "./behaviours/PixelClock";
 import PixelCountdown from "./behaviours/PixelCountdown";
 import ColorAlarm from "./behaviours/ColorAlarm";
+import Fire from "./behaviours/Fire";
 
 
 

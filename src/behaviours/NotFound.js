@@ -1,7 +1,5 @@
 
 import '../App.css';
-import {WrapUI} from '../MyStyles'
-
 import React from "react"
 
 

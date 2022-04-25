@@ -1,7 +1,7 @@
 import './App.css';
-import { Button, Card, CardHeader, FormControlLabel, Switch } from '@material-ui/core';
+import { Button, Card, CardHeader, FormControlLabel, Switch } from '@mui/material';
 import React, {useState, useEffect, useCallback } from "react"
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import MyStyles from './MyStyles'
 
 import Device from "./Device";

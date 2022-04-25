@@ -1,8 +1,5 @@
 import '../App.css';
-import { Box, Slider, Typography} from '@material-ui/core';
-import MyStyles,{WrapUI} from '../MyStyles'
-import { makeStyles,withStyles } from '@material-ui/core/styles';
-
+import { Box, Slider, Typography} from '@mui/material';
 import React, {useState,useEffect} from "react"
 
 
@@ -12,9 +9,6 @@ export default (props) => {
   const [intensity, setIntensity] = useState(data['intensity'] || 0.9)
   const [ripple, setRipple] = useState(data['ripple'] || 1.0)
   const [speed, setSpeed] = useState(data['speed'] || 0.1)
-
-  const useStyles = makeStyles(MyStyles);
-  const classes = useStyles();
 
   useEffect(() => {
     console.log("Updating Fire block with: " + JSON.stringify(props))

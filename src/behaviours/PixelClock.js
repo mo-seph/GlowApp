@@ -1,8 +1,5 @@
 import '../App.css';
-import { Box, Slider, Typography} from '@material-ui/core';
-import MyStyles,{WrapUI} from '../MyStyles'
-import { makeStyles,withStyles } from '@material-ui/core/styles';
-
+import { Box, Slider, Typography} from '@mui/material';
 import React, {useState,useEffect} from "react"
 
 
@@ -11,9 +8,6 @@ export default (props) => {
   console.log("Got PixelData: " + JSON.stringify(data));
   const [start, setStart] = useState(data['start'] || 10)
   const [scale, setScale] = useState(data['scale'] || 1)
-
-  const useStyles = makeStyles(MyStyles);
-  const classes = useStyles();
 
   useEffect(() => {
     console.log("Updating PixelClock block with: " + JSON.stringify(props))

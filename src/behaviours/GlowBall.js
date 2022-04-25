@@ -1,6 +1,5 @@
 import '../App.css';
-import { Button, Box, Slider, Typography,Container,Paper,Card,CardContent } from '@material-ui/core';
-import MyStyles,{WrapUI} from '../MyStyles'
+import { Button, Box, Slider, Typography,Container,Paper,Card,CardContent } from '@mui/material';
 
 import React, {useState, useEffect } from "react"
 

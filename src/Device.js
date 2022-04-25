@@ -1,9 +1,8 @@
 import './App.css';
-import { Box, Slider, Typography, Button, Switch, Card, CardHeader, CardContent} from '@material-ui/core';
+import { Box, Slider, Typography, Button, Switch, Card, CardHeader, CardContent} from '@mui/material';
 import MyStyles,{WrapUI} from './MyStyles'
-import { makeStyles,withStyles } from '@material-ui/core/styles';
 import Behaviour from "./Behaviour";
-import BrushIcon from '@material-ui/icons/Brush';
+import BrushIcon from '@mui/icons-material/Brush';
 
 
 import React, {useState,useEffect} from "react"
@@ -13,8 +12,6 @@ export default (props,functionsIn) => {
   const behaviours = props['state'] || []
   const device = props['device'] || {}
 
-  const useStyles = makeStyles(MyStyles);
-  const classes = useStyles();
 
   const functions = {
     sendData : props.functions.sendData(device),

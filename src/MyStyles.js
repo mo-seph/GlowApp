@@ -1,6 +1,6 @@
-import { Button, Box, Slider, Typography,Container,Paper,Card,CardContent,CardHeader,FormControlLabel,Switch,Grid } from '@material-ui/core';
-import { makeStyles,withStyles } from '@material-ui/core/styles';
-import BrushIcon from '@material-ui/icons/Brush';
+import { Button, Box, Slider, Typography,Container,Paper,Card,CardContent,CardHeader,FormControlLabel,Switch,Grid } from '@mui/material';
+import { makeStyles,withStyles } from '@mui/styles';
+import BrushIcon from '@mui/icons-material/Brush';
 
 import React, {useState, useEffect } from "react"
 

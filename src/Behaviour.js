@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from "react"
-import { Button, Box, Slider, Typography,Container,Paper,Card,CardContent,CardHeader,FormControlLabel,Switch,Grid } from '@material-ui/core';
-import { makeStyles,withStyles } from '@material-ui/core/styles';
-import BrushIcon from '@material-ui/icons/Brush';
+import { Button, Box, Slider, Typography,Container,Paper,Card,CardContent,CardHeader,FormControlLabel,Switch,Grid } from '@mui/material';
+//import { makeStyles,withStyles } from '@mui/';
+import BrushIcon from '@mui/icons-material/Brush';
 import MyStyles from './MyStyles'
 
 
@@ -45,8 +45,8 @@ export default (block,callbacks) => {
 
 export default (props) => {
   if( ! props.block ) return <></>
-  const useStyles = makeStyles(MyStyles);
-  const classes = useStyles();
+  //const useStyles = makeStyles(MyStyles);
+  //const classes = useStyles();
   const handleChange = (e,v) => {
     //console.log("Event: "+e+" val: " + v)
     if( v ) props.functions.sendCommand({activate:props.block.id})
@@ -62,7 +62,9 @@ export default (props) => {
 
   const content = props.block.active ? elem : <></>
   return (
-    <Card className={classes.card} key={props.block.id}>
+    //className={classes.card} 
+    <Card 
+        key={props.block.id}>
       <CardHeader
         avatar={
           <BrushIcon/>
@@ -83,9 +85,11 @@ export default (props) => {
         subheader={"ID: " + props.block.id + ", Type: " + props.block.type}
         style={MyStyles.cardHeader}
       />
-      <CardContent className={classes.cardContent}>
+      <CardContent 
+      >
         {content}
       </CardContent>
     </Card>
  );
+      //className={classes.cardContent}
 }

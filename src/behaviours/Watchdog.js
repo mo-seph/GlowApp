@@ -1,8 +1,5 @@
 import '../App.css';
-import { Box, Slider, Typography} from '@material-ui/core';
-import MyStyles,{WrapUI} from '../MyStyles'
-import { makeStyles,withStyles } from '@material-ui/core/styles';
-
+import { Box, Slider, Typography} from '@mui/material';
 import React, {useState,useEffect} from "react"
 
 
@@ -10,9 +7,6 @@ export default (props) => {
   const data = props['block']['data'] || {}
   const [length, setLength] = useState(data['length'] || 10)
   const [factor, setFactor] = useState(data['factor'] || 10)
-
-  const useStyles = makeStyles(MyStyles);
-  const classes = useStyles();
 
   useEffect(() => {
     console.log("Updating Watchdog block with: " + JSON.stringify(props))

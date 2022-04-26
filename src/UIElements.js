@@ -8,15 +8,25 @@ const ident = (x)=>{return x}
 
 export const VSlider = (id,label,value,onChange,onCommit,min=0.0,max=1.0,step=0.01) => {
 
-    return <Stack direction="column">
-        <Slider
-        aria-labelledby={id}
-        size="small"
-        orientation="vertical"
-        value={value} step={step} min={min} max={max}
-        onChange={(e, val) => onChange(val)} onChangeCommitted={onCommit}/>
+    return LabelVSlider(id,label,
+        DefaultVSlider(id,value,onChange,onCommit,min,max,step)
+        )
+}
+
+export const LabelVSlider = (id,label,slider) => {
+    return <Stack direction="column">    
+        {slider}
         <Typography id={id} gutterBottom>{label}</Typography>
     </Stack>
+}
+
+export const DefaultVSlider = (id,value,onChange,onCommit,min=0.0,max=1.0,step=0.01) => {
+    return        <Slider
+    aria-labelledby={id}
+    size="small"
+    orientation="vertical"
+    value={value} step={step} min={min} max={max}
+    onChange={(e, val) => onChange(val)} onChangeCommitted={onCommit}/>
 }
 
 export const HSlider = (id,label,value,onChange,onCommit,min=0.0,max=1.0,step=0.01) => {
@@ -93,7 +103,12 @@ export const HSVInterface = (props) => {
     }
     return <>
     <Stack sx={{ height: 200 }} spacing={1} direction="row" justifyContent="space-evenly">
-        {VSlider("h-slider","H",hue,setHue,sendHSV,0.0,360.0,0.5)}
+        {LabelVSlider("h-slider","H",
+            <Box sx={{height:"100%", 
+                background:'linear-gradient(to top, hsla(0, 100%, 50%) 0%, hsl(60, 100%, 50%) 17%, hsl(120, 100%, 50%) 33%, hsl(180, 100%, 50%) 50%, hsl(240, 100%, 50%) 66%, hsl(320, 100%, 50%) 83%, hsl(360, 100%, 50%) 100%)'}}>
+            {DefaultVSlider("h-slider",hue,setHue,sendHSV,0.0,360.0,0.5)}
+            </Box>
+        )}
         {VSlider("s-slider","S",saturation,setSaturation,sendHSV,0.0,1.0,0.01)}
         {VSlider("v-slider","V",intensity,setIntensity,sendHSV,0.0,1.0,0.01)}
     </Stack>

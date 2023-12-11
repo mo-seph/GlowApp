@@ -1,143 +1,110 @@
 import './App.css';
-import { Button, Card, CardHeader, FormControlLabel, Switch } from '@mui/material';
+import { AppBar, Stack, Typography } from '@mui/material';
 import React, {useState, useEffect, useCallback } from "react"
-import { makeStyles } from '@mui/styles';
-import MyStyles from './MyStyles'
-
-import Device from "./Device";
-import MyTabs from "./MyTabs";
+import { ConnectedDisplay, PingButton } from './ConnectionElements';
+import { DeviceHeader, DeviceBody, DeviceSelector } from "./Device";
+import { useTheme } from '@mui/material/styles';
 
 import mqtt from 'mqtt'
 
-const default_state = {
-  living_d:[
-    {
-      id: 0,
-      type:"Fill",
-      active:true,
-      data: {
-        "r":0.1,
-        "g":0.4,
-        "b":0.8,
-        "w":0.2,
-        "time":1.0
-      }
-    },
-    {
-      id:2,
-      type:"PixelClock",
-      active:true,
-      name:"Time"
-    },
 
-
-    {
-      id: 4,
-      type:"Alarms",
-      active:true,
-      data: {
-        "start":20,
-        "length":10,
-        "time":5
-      }
-    },
-    {
-      id: 16,
-      type:"Watchdog",
-      active:true,
-      data: {
-        "length":1.0
-      }
-    }
-  ],
-  living:[
-    {
-      id: 0,
-      type:"Fill",
-      active:true,
-      data: {
-        "r":0.1,
-        "g":0.4,
-        "b":0.8,
-        "w":0.2,
-        "time":1.0
-      }
-    }
-  ]
-}
-
-const default_devices = {
-  //living_d:{id:"living_d",name:"Living Room Default","ip":"192.168.0.0","mqtt_commands":"leds/default/commands","mqtt_state":"leds/default/state"},
-  //living:{"id":"living","name":"Living Room Initial","ip":"192.168.178.229","mqtt_commands":"leds/living/commands","mqtt_state":"leds/living/state"},
-}
+const user_device = JSON.parse(localStorage.getItem('user_default_device')||'{"device":"none"}')['device']
+console.log("Set user device: ",user_device)
 
 const App = () => {
   const [, updateState] = useState();
   const forceUpdate = useCallback(() => updateState({}), []);
 
   const [connectionStatus, setConnectionStatus] = useState(false);
-  const [client, setClient] = useState();
-  const [functions, setFunctions] = useState({});
-  const [devices, setDevices] = useState(default_devices);
+  const [client_r, setClient] = useState();
+  //const [functions, setFunctions] = useState({});
+  const [devices, setDevices] = useState({});//default_devices);
   const [deviceState, setDeviceState] = useState({});
-
+  const [currentDevice, setCurrentDevice] = useState(null);
+  const [userSelectedDevice, setUserSelectedDevice] = useState(false);
+  var safe_client = null;
 
   useEffect(() => {
     console.log("---------\nStarting MQTT\n---------")
     //const client = mqtt.connect("mqtt://glowserver.local:9001");
-    const client = mqtt.connect("mqtt://192.168.178.108:9001");
+    //const client = mqtt.connect("mqtt://192.168.178.108:9001");
+    var host = window.location.hostname;
+    if( host === "localhost") { host = "moominpappa.local"}
+    console.log("Host: ",host)
+    const client = mqtt.connect("mqtt://" + host + ":9001");
+    safe_client = client
+    //setClient(client);
+    console.log("Client set to: ",client_r)
     //const client = mqtt.connect("mqtt://moominpappa.local:9001");
     //const client = mqtt.connect("mqtt://localhost:9001");
-      client.on('connect', () => {
-        setConnectionStatus(true)
-        client.subscribe("leds/+/state")
-        client.subscribe("leds/ping_response")
-        console.log("Connected!")
-        client.publish('leds/ping_request', JSON.stringify({"ping":1}))
-      });
-      client.on('message', (topic, payload, packet) => {
-        console.log("Message! "+payload + "  on " + topic)
-        const id_match = topic.match(/leds\/(.*)\/state/);
-        if( id_match ) {
-          const device_id = id_match[1];
-          //console.log("Got message from: " + device_id)
-          try {
-            var data = JSON.parse(payload.toString())
-            deviceState[device_id] = data['state'];
-            setDeviceState(deviceState);
-          }
-          catch( err ) {
-            console.log("Couldn't set data from document")
-            console.log(payload.toString())
-          }
-        }
-        else if( topic == "leds/ping_response") {
+    client.on('connect', () => {
+      setConnectionStatus(true)
+      client.subscribe("leds/+/state")
+      client.subscribe("leds/ping_response")
+      console.log("Connected!")
+      client.publish('leds/ping_request', JSON.stringify({"ping":1}))
+    });
+    client.on('message', (topic, payload, packet) => {
+      console.log("Message! "+payload + "  on " + topic)
+      const id_match = topic.match(/leds\/(.*)\/state/);
+      if( id_match ) {
+        const device_id = id_match[1];
+        //console.log("Got message from: " + device_id)
+        try {
           var data = JSON.parse(payload.toString())
-          devices[data["id"]] = data;
-          setDevices(devices);
-          //console.log("Setting devices: " + JSON.stringify(devices))
+          deviceState[device_id] = data['state'];
+          setDeviceState(deviceState);
+        }
+        catch( err ) {
+          console.log("Couldn't set data from document")
+          console.log(payload.toString())
+        }
+      }
+      else if( topic === "leds/ping_response") {
+        var data = JSON.parse(payload.toString())
+        devices[data["id"]] = data;
+        setDevices(devices);
+        console.log("Got device: ",data["id"])
+        if( ! userSelectedDevice ) {
+          //console.log("We do not have user selected device", data)
+          const matches = data["id"] === user_device 
+          if( matches ) {
+            //console.log("Found matching device", data)
+            set_selected_device(get_device_data(data["id"]), true)
+          }
+          else if(! currentDevice ) {
+            //console.log("No device set, so setting a non-user selected one")
+            set_selected_device(get_device_data(data["id"]), false)
+          } else {
+            //console.log("Got a current device, so not replacing it")
+          }
         }
         else {
-          console.log("Unknown message: " + payload.toString())
+          //console.log("Not setting device as it's already user selected", data)
         }
-        forceUpdate();
-      });
-      setClient(client);
-
-
-      return function cleanup() {
-        console.log("Closing client")
-        client.end()
       }
+      else {
+        console.log("Unknown message: " + payload.toString())
+      }
+      forceUpdate();
+    });
+
+    setClient(client)
+    return function cleanup() {
+      console.log("Closing client")
+      client.end()
+    }
   },[]);
 
   const sendCommand = (device)=>(d) => {
     console.log("Sending command to ["+ device.mqtt_commands +"] " + JSON.stringify(d));
-    client.publish(device.mqtt_commands, JSON.stringify(d))
+    if( client_r ) { client_r.publish(device.mqtt_commands, JSON.stringify(d)) }
+    else if( safe_client ) { safe_client.publish(device.mqtt_commands, JSON.stringify(d)) }
+    else {console.error("No clients set!")}
   }
   const ping = () => {
     console.log("Sending ping request" );
-    client.publish("leds/ping_request", JSON.stringify({ping:1}))
+    client_r.publish("leds/ping_request", JSON.stringify({ping:1}))
   }
 
   const sendData = (device)=>(props,data) => {
@@ -148,7 +115,7 @@ const App = () => {
     };
     const packet_s =JSON.stringify(packet)
     //console.log("Became: " + packet_s );
-    client.publish(device.mqtt_commands, packet_s)
+    client_r.publish(device.mqtt_commands, packet_s)
   }
   const funcs =  {
     sendData: sendData,
@@ -156,76 +123,45 @@ const App = () => {
     ping: ping
   }
 
-  const useStyles = makeStyles(MyStyles);
-  const classes = useStyles();
+  //const useStyles = makeStyles(MyStyles);
+  //const classes = useStyles();
 
+  const get_device_data = (k) => {return({device: devices[k], state: deviceState[k] })}
   const device_data = Object.keys(devices).map(
     (k) => {return({device: devices[k], state: deviceState[k] })}
   )
-  const device_to_name = (v)=>v.device.name
-  const device_to_content = (v)=><Device device={v.device} state={v.state} functions={funcs} />
-  const on_select = (v) => {
+  //const device_to_name = (v)=>v.device.name
+  //const device_to_content = (v)=><Device device={v.device} state={v.state} functions={funcs} />
+  const set_selected_device = (v,user_selected=true) => {
+    console.log("Selected device: ",v)
     sendCommand(v.device)({state:1})
-    console.log("On Change: " + JSON.stringify(v))
+    setCurrentDevice(v.device)
+    if( user_selected ) {
+      setUserSelectedDevice(true);
+      localStorage.setItem('user_default_device',JSON.stringify({device:v.device.id}))
+    }
+    //console.log("On Change: " + JSON.stringify(v))
   }
 
-  console.log("Redrawing!")
+  const theme = useTheme()
   return (
     <div className="App">
-    <Card className={classes.card} key="header">
-    <CardHeader
-      action={
-        <>
-        <FormControlLabel
-          label="Connected"
-          control={
-            <>
-            <Switch
-              checked={connectionStatus || false}
-              name="connected" color="secondary"
-            />
+      <AppBar position="static" sx={{bgcolor: theme.palette.primary.light}}>
 
-            </>
-        }
-        />
-        <Button variant="contained" color="primary"
-          onClick={() => { ping() }} >
-          Ping
-        </Button>
-        </>
-      }
-      title="Glow App"
-      style={MyStyles.cardHeader}
-    />
-    </Card>
-    <MyTabs
-      items={device_data}
-      toLabel={device_to_name}
-      toContent={device_to_content}
-      onSelect={on_select} />
+    <Stack direction="row" justifyContent="space-between" alignItems="center">
+      <ConnectedDisplay connectionStatus={connectionStatus}/>
+      <Typography variant="h5"> Glow App </Typography>
+        <PingButton ping={ping}/>
+    </Stack>
+    <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <DeviceSelector items={device_data} onSelect={set_selected_device} />
+      <DeviceHeader device={currentDevice} functions={funcs}/>
+    </Stack>
+      </AppBar>
+    <DeviceBody device={currentDevice} states={device_data} functions={funcs}/>
     </div>
   );
 }
-/*
-
-  */
-
-/*
-{Object.keys(devices).map( (v)=>JSON.stringify(devices[v]) )}
-*/
-
-/*
-{Object.keys(devices).map(
-  (v)=>Device({device:devices[v],state:deviceState[v]},funcs) )}
-  */
-
-/*
-{MyTabs(
-  Object.keys(devices).map(
-    (k) => {return({device: devices[k], state: deviceState[k] })}
-  ),
-  (v)=>v.device.name,
-  (v)=>Device({"device":v.device,"state":v.state},funcs) )}
-*/
+  
 
 export default App;
